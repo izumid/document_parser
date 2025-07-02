@@ -23,6 +23,7 @@ __result/*
 # Ignore .env files (but not .env.example)
 !.env.example
 .env
+.venv
 
 # Ingore specific files
 config/config.json

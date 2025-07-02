@@ -96,4 +96,4 @@ def execute_diagnostic(genbase,run,online,id):
 
 		with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(result, f, indent=4)
 
-execute_diagnostic(genbase=False,run=True,online=True,id="762")
+execute_diagnostic(genbase=False,run=True,online=False,id="762")

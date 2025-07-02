@@ -1,8 +1,11 @@
 @echo off
 TITLE PIP: INSTALL
 
-set "path_env=%~dp0..\venv\Scripts"
+set "path_env=%~dp0..\.venv\Scripts"
 echo Enviroment path: %path_env%
+
+echo Create .venv
+python -m venv %~dp0..\.venv
 
 call "%path_env%\activate.bat"
 python -m pip list
