@@ -11,11 +11,11 @@
 **/__pycache__/
 
 # Ignore files but not folders
-_file_test/*
-!_file_test/.gitkeep
+__file_test/*
+!__file_test/.gitkeep
 
-_result/*
-!_result/.gitkeep
+__result/*
+!__result/.gitkeep
 
 # Ignore files with extension
 .cfg
