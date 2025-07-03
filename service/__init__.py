@@ -10,13 +10,13 @@ import sys
 sys.path.append(os.getcwd())
 import model
 
-
+#MARK: Debug
 def debug_code(message,var=None,debug=False):
 	"""
 	Description:
 		Print messages across the process to verify data behaviour.
 
-	Args:
+	Arg:
 		message(str): text to identify the code process the message are about;
 		var(any): variable values to validade;
 		debug(bool): true print's the messages;
@@ -28,12 +28,49 @@ def debug_code(message,var=None,debug=False):
 
 
 # MARK: Customize Output
+# def custom_structure(id,key_name,result_set):
+# 	"""
+# 	Description:
+# 		If you need, there is a friendly output structure to java systems.
+
+# 	Arg:
+# 		id(str): extends to systems that uses hash codes instead of numeric codes;
+# 		open_ai_output(dict): result from openAI parsing the document based of previously formated response;
+# 	"""
+
+# 	final_dictionary = {}
+# 	final_dictionary[key_name["k1"]] = id
+# 	file = []
+# 	data = []
+
+# 	for output in result_set:
+# 		#data = {}
+
+# 		#for year, category in output[1].items():
+# 		for year, category in output.items():
+# 			aux = {}
+
+# 			for item, info in category.items():
+# 				sub_lst = []
+
+# 				for k,v in info.items():
+# 					sub_lst.append({key_name["k10"]: k, key_name["k11"]: v})
+			
+# 				aux[item] = sub_lst
+# 			data[key_name["k5"]] = year
+# 			data[key_name["k6"]] = aux
+			
+# 		file.append({key_name["k3"]: output[0], key_name["k4"]: data})
+# 	final_dictionary[key_name["k2"]] = file
+
+# 	return(final_dictionary)
+
 def custom_structure(id,key_name,result_set):
 	"""
 	Description:
-		If you need, there is a friendly output structure to java systems.
+		Friendly output structure to non pythonic languages e.g java's system based on.
 
-	Args:
+	Arg:
 		id(str): extends to systems that uses hash codes instead of numeric codes;
 		open_ai_output(dict): result from openAI parsing the document based of previously formated response;
 	"""
@@ -41,27 +78,153 @@ def custom_structure(id,key_name,result_set):
 	final_dictionary = {}
 	final_dictionary[key_name["k1"]] = id
 	file = []
+	
 
 	for output in result_set:
-		data = {}
-
-		for year, category in output[1].items():
+		for year, category in output.items():
 			aux = {}
-
 			for item, info in category.items():
 				sub_lst = []
-
-				for k,v in info.items():
-					sub_lst.append({key_name["k10"]: k, key_name["k11"]: v})
+				for description, value in info.items():
+					sub_lst.append({key_name["k10"]: description, key_name["k11"]: value})
 			
-				aux[item] = sub_lst
-			data[key_name["k5"]] = year
-			data[key_name["k6"]] = aux
-			
-		file.append({key_name["k3"]: output[0], key_name["k4"]: data})
+				aux[item] = sub_lst			
+		file.append({key_name["k3"]: year, key_name["k4"]: aux})
 	final_dictionary[key_name["k2"]] = file
 
 	return(final_dictionary)
+
+
+# MARK:Single Documents
+def document_unique(key,key_unique,data,add_mult=True):
+	"""
+	Description:
+		Join each dictionary into a single array;
+	Arg:
+		key(list): list of dictionary keys;
+		key_unique(list): identify unique keys to add in array final result;
+		double_data(bool): if true add the firt two key,value of dict, else just the first;
+	"""
+
+	result = []
+	indexes = sorted([key.index(x) for x in key_unique if key.count(x) == 1])
+
+	for idx in indexes:
+		result.append( {list(data[idx].keys())[0]: list(data[idx].values())[0]} )
+
+		if len(list(data[idx].keys())) > 1:
+			if int(list(data[idx].keys())[1]) == int(max(key_unique)) and add_mult:
+				result.append( {list(data[idx].keys())[1]: list(data[idx].values())[1]} )
+	
+	return(result)
+
+# MARK: Separated Documents
+def document_separated(key, data):	
+	"""
+	Description:
+		If documents are unique just ad then, if separated merge then;
+	Arg:
+		key(list): list of dictionary keys;
+		result_set(list): list of dics returned by openAi's api;
+	"""
+
+	check_unique =  [int(x) for x in key]
+	double_data = True if check_unique.count(max(check_unique)) < 2 else False
+	#print(f"add mult: {add_mult}")
+	key_unique = [x for x in key if check_unique.count(x) == 1]
+
+	idx_duplicate = [i for i, val in enumerate(check_unique) if val not in key_unique]
+	idx_unique = [i for i, val in enumerate(check_unique) if val in key_unique]
+
+	#print(check_unique)
+	#print(yd_float)
+	#print(idx_duplicate)
+	#print(idx_unique)
+
+	#final_result = {}
+	
+	#previous_year = [data[idx] for idx in idx_unique]
+	data_unique = [data[idx] for idx in idx_unique]
+	#merge_update = [data[idx] for idx in idx_duplicate]
+	duplicated_data = [data[idx] for idx in idx_duplicate]
+
+	#with open(os.path.join(os.path.join(os.getcwd(),r"__result/check.json")), "w") as f: json.dump(merge_update, f, indent=4)
+
+	# for dct in merge_update:
+	# 	for year, inner_dict in dct.items():
+	# 		#year = int(float(year))
+	# 		if year not in final_result: final_result[year] = {}
+	# 		final_result[year].update(inner_dict)
+
+	# with open(os.path.join(os.path.join(os.getcwd(),r"__result/beta_spirit.json")), "w") as f: json.dump(final_result, f, indent=4)
+	
+	for i in range(int(len(duplicated_data)/2)):
+		year_previous = duplicated_data[i]
+		year_current = duplicated_data[i+1]
+
+		for year, inner_dict in year_previous.items():
+
+			for category, inner_dict2 in inner_dict.items():
+				#print(f"item: {item},values: {values}\r\n")
+				#print(f"item: {year_current[year][item]},values: {999}","\r\n"*5)
+				if category not in year_current[year]: year_current[year][category] = {}
+
+				for item, val in inner_dict2.items():
+					if item not in year_current[year][category]: year_current[year][category][item] = val
+		
+		duplicated_data.pop(i)
+
+	"""
+	for i in merge_update:
+		for k,v in i.items():
+			print(k)
+			for kk, vv in v.items():
+				print(kk,vv,len(vv),"\r\n"*1)
+			print("\r\n"*2)
+		print("\r\n"*5)
+	"""
+	
+	#print(merge_update)
+	#print(final_result)
+
+	#add merge_update result with uniques years proceesed by alpha. That must be done into a dict, then return it
+
+	result = document_unique(key=key,key_unique=key_unique,data=data_unique,add_mult=double_data)
+	result.extend(duplicated_data)
+
+	#for i in result:
+		#print(i,"\r\n"*2)
+
+	#print(result)
+	return(result)
+
+
+# MARK:Data Merge
+def document_data_merge(result_set):
+	"""
+	Description:
+		Identify which type of structure is: unique documents, unique and separated documents of same context or document unify documents (more then 2 years);
+	Arg:
+		result_set(list[3]): 
+			[0](list): keys corresponding to document years (ordered as [1]);
+			[1](dict): list of dics returned by openAi's api;
+			[3](int): count of unique keys;
+	"""
+
+	year = result_set[0]
+	y_complete = [float(x) for x in year]
+	y_distinct = [x for x in y_complete if y_complete.count(x) == 1]
+
+	data = result_set[1]
+	separated_document = result_set[2]
+	result = []
+
+	if len(year) == len(set([int(x) for x in y_complete])):
+		if separated_document == 0: result = document_unique(key=y_complete,unique=y_distinct,data=data)
+		else: result = data
+	else: result = document_separated(key=y_complete,data=data)
+	
+	return(result)
 
 
 # MARK: openIA Request 
@@ -70,7 +233,7 @@ def open_ia_request(base64,token,response_structure,filename,gpt_version,wait_ti
 	Description:
 		Send the bs64 file to openIA API and request the parsed data based on model structure.
 
-	Args:
+	Arg:
 		base64(list[[float, str]...]): [0] is the document's year, [1] is the base code;
 		token(str): token access to openAI requests;
 		response_structure(str): json structure to insure correct data format when requesting parsing from openIA API;
@@ -133,7 +296,7 @@ def request_format(main_key,property,response_structure):
 	"""
 	Function to format the send structure to openIA. Due to tests, a solid structure implies in less token in addition to an more accurate responses.
 	
-	Args: 
+	Arg: 
 		main_key(list);
 		property(dict): {name_key: model.object};
 		response_strucutre(path): path to save de structure;
@@ -141,7 +304,7 @@ def request_format(main_key,property,response_structure):
 	"""
 	
 	dct = {
-		"title": "Beta"
+		"title": "DocumentParser"
 		,"type": "object"
 		,"additionalProperties": bool(0)
 		,"properties": {}
@@ -168,7 +331,7 @@ def api_client(id,base64,config_json,online=True):
 	Description:
 		Send the bs64 file to openIA API and request the parsed data based on model structure.
 
-	Args:
+	Arg:
 		id(str): extends to systems that uses hash codes instead of numeric codes;
 		base64(list[[float, str]...]): [0] is the document's year, [1] is the base code;
 		online(bool): Used to controll if will be request data to openAI or a previously saved one;
@@ -185,8 +348,8 @@ def api_client(id,base64,config_json,online=True):
 		,cof["k8"]: model.Liabilities.model_json_schema()
 		,cof["k9"]: model.IncomeStatement.model_json_schema()
 	}
+	base64 = [[float(year), bs_code] for year, bs_code in base64]
 
-	
 	start = time.time()
 
 	if not os.path.exists(response_structure) or config_json["response_format"]:
@@ -208,10 +371,17 @@ def api_client(id,base64,config_json,online=True):
 			,debug = debug
 		)
 	else:
-		with open(os.path.join(path_result,"open_ai_output.json")) as jsf: result_set = json.load(jsf)
+		#with open(os.path.join(path_result,"open_ai_output.json")) as jsf: result_set = json.load(jsf)
+		with open(os.path.join(path_result,r"sintetic/result_set_beta.json")) as jsf: result_set = json.load(jsf)
 	
+	result_set = document_data_merge(result_set)
+
 	final_dictionary = custom_structure(id=id,key_name=config_json["custom_output_format"],result_set=result_set)
 	with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(final_dictionary, f, indent=4)
 	debug_code(message=f"Total Request duration (sec): {(time.time() - start)}",debug=debug)
 
+	# print(result_set)
+	# for dc in result_set:
+	# 	print(dc,"\r\n"*2)
+	#return(0)
 	return(final_dictionary)

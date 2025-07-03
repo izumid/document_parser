@@ -79,21 +79,22 @@ def execute_diagnostic(genbase,run,online,id):
 	if not os.path.exists:  os.makedirs(path_result)
 	#filename = "BALANCETE 2T2024_assinado.json"
 	#filename = "DRE 2T2024_assinado.json"
-	#filename = "BP_2022.json"
-	filename = "bs64.json"
+	filename = "BP_2022.json"
+	#filename = "bs64.json"
 
 	if genbase:
-		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"_file_test/01_baby/text_flow"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
-		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"_file_test/01_baby/table"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
-		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"_file_test/03_caveman/text_flow"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
+		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"__file_test/01_baby/text_flow"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
+		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"__file_test/01_baby/table"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
+		#pdf_to_bs64(path_file=os.path.join(os.getcwd(),"__file_test/03_caveman/text_flow"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=False)
 
-		pdf_to_bs64(path_file=os.path.join(os.getcwd(),"_file_test/01_baby/multi"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=True)
+		pdf_to_bs64(path_file=os.path.join(os.getcwd(),"__file_test/01_baby/multi"),path_destination=os.path.join(os.getcwd(),"_file_test"),filename="bs64",delimiter=",",multi_bs64=True)
 
 	if run:
 		with open(os.path.join(os.getcwd(),"config/config.json")) as jsonfile: config_json = json.load(jsonfile)
-		with open(os.path.join(os.getcwd(),r"_file_test",filename), 'r', encoding='utf-8') as file: base64 = json.load(file)
+		with open(os.path.join(os.getcwd(),r"__file_test",filename), 'r', encoding='utf-8') as file: base64 = json.load(file)
 		result = api_client(id=id,base64=base64,config_json=config_json,online=online)
 
 		with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(result, f, indent=4)
-
+		print(result)
+		
 execute_diagnostic(genbase=False,run=True,online=False,id="762")

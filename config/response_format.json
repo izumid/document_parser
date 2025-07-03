@@ -1,5 +1,5 @@
 {
-    "title": "Beta",
+    "title": "DocumentParser",
     "type": "object",
     "additionalProperties": false,
     "properties": {
@@ -8,7 +8,7 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "asset": {
+                "ativo": {
                     "additionalProperties": false,
                     "properties": {
                         "ativo_circulante_caixa_e_bancos": {
@@ -162,7 +162,7 @@
                     "title": "Asset",
                     "type": "object"
                 },
-                "liabilities": {
+                "passivo": {
                     "additionalProperties": false,
                     "properties": {
                         "circulante": {
@@ -321,7 +321,7 @@
                     "title": "Liabilities",
                     "type": "object"
                 },
-                "income_statement": {
+                "demonstracao_resultado_exercicio": {
                     "additionalProperties": false,
                     "properties": {
                         "receita_operacional_bruta": {
@@ -447,9 +447,9 @@
                 }
             },
             "required": [
-                "asset",
-                "liabilities",
-                "income_statement"
+                "ativo",
+                "passivo",
+                "demonstracao_resultado_exercicio"
             ]
         },
         "2023": {
@@ -457,7 +457,7 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "asset": {
+                "ativo": {
                     "additionalProperties": false,
                     "properties": {
                         "ativo_circulante_caixa_e_bancos": {
@@ -611,7 +611,7 @@
                     "title": "Asset",
                     "type": "object"
                 },
-                "liabilities": {
+                "passivo": {
                     "additionalProperties": false,
                     "properties": {
                         "circulante": {
@@ -770,7 +770,7 @@
                     "title": "Liabilities",
                     "type": "object"
                 },
-                "income_statement": {
+                "demonstracao_resultado_exercicio": {
                     "additionalProperties": false,
                     "properties": {
                         "receita_operacional_bruta": {
@@ -896,9 +896,9 @@
                 }
             },
             "required": [
-                "asset",
-                "liabilities",
-                "income_statement"
+                "ativo",
+                "passivo",
+                "demonstracao_resultado_exercicio"
             ]
         },
         "2024": {
@@ -906,7 +906,7 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "asset": {
+                "ativo": {
                     "additionalProperties": false,
                     "properties": {
                         "ativo_circulante_caixa_e_bancos": {
@@ -1060,7 +1060,7 @@
                     "title": "Asset",
                     "type": "object"
                 },
-                "liabilities": {
+                "passivo": {
                     "additionalProperties": false,
                     "properties": {
                         "circulante": {
@@ -1219,7 +1219,7 @@
                     "title": "Liabilities",
                     "type": "object"
                 },
-                "income_statement": {
+                "demonstracao_resultado_exercicio": {
                     "additionalProperties": false,
                     "properties": {
                         "receita_operacional_bruta": {
@@ -1345,9 +1345,9 @@
                 }
             },
             "required": [
-                "asset",
-                "liabilities",
-                "income_statement"
+                "ativo",
+                "passivo",
+                "demonstracao_resultado_exercicio"
             ]
         },
         "2025": {
@@ -1355,7 +1355,7 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "asset": {
+                "ativo": {
                     "additionalProperties": false,
                     "properties": {
                         "ativo_circulante_caixa_e_bancos": {
@@ -1509,7 +1509,7 @@
                     "title": "Asset",
                     "type": "object"
                 },
-                "liabilities": {
+                "passivo": {
                     "additionalProperties": false,
                     "properties": {
                         "circulante": {
@@ -1668,7 +1668,7 @@
                     "title": "Liabilities",
                     "type": "object"
                 },
-                "income_statement": {
+                "demonstracao_resultado_exercicio": {
                     "additionalProperties": false,
                     "properties": {
                         "receita_operacional_bruta": {
@@ -1794,9 +1794,9 @@
                 }
             },
             "required": [
-                "asset",
-                "liabilities",
-                "income_statement"
+                "ativo",
+                "passivo",
+                "demonstracao_resultado_exercicio"
             ]
         }
     },
