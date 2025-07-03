@@ -130,34 +130,12 @@ def document_separated(key, data):
 
 	check_unique =  [int(x) for x in key]
 	double_data = True if check_unique.count(max(check_unique)) < 2 else False
-	#print(f"add mult: {add_mult}")
 	key_unique = [x for x in key if check_unique.count(x) == 1]
-
 	idx_duplicate = [i for i, val in enumerate(check_unique) if val not in key_unique]
 	idx_unique = [i for i, val in enumerate(check_unique) if val in key_unique]
-
-	#print(check_unique)
-	#print(yd_float)
-	#print(idx_duplicate)
-	#print(idx_unique)
-
-	#final_result = {}
-	
-	#previous_year = [data[idx] for idx in idx_unique]
-	data_unique = [data[idx] for idx in idx_unique]
-	#merge_update = [data[idx] for idx in idx_duplicate]
+	#data_unique = [data[idx] for idx in idx_unique]
 	duplicated_data = [data[idx] for idx in idx_duplicate]
 
-	#with open(os.path.join(os.path.join(os.getcwd(),r"__result/check.json")), "w") as f: json.dump(merge_update, f, indent=4)
-
-	# for dct in merge_update:
-	# 	for year, inner_dict in dct.items():
-	# 		#year = int(float(year))
-	# 		if year not in final_result: final_result[year] = {}
-	# 		final_result[year].update(inner_dict)
-
-	# with open(os.path.join(os.path.join(os.getcwd(),r"__result/beta_spirit.json")), "w") as f: json.dump(final_result, f, indent=4)
-	
 	for i in range(int(len(duplicated_data)/2)):
 		year_previous = duplicated_data[i]
 		year_current = duplicated_data[i+1]
@@ -165,8 +143,6 @@ def document_separated(key, data):
 		for year, inner_dict in year_previous.items():
 
 			for category, inner_dict2 in inner_dict.items():
-				#print(f"item: {item},values: {values}\r\n")
-				#print(f"item: {year_current[year][item]},values: {999}","\r\n"*5)
 				if category not in year_current[year]: year_current[year][category] = {}
 
 				for item, val in inner_dict2.items():
@@ -174,28 +150,9 @@ def document_separated(key, data):
 		
 		duplicated_data.pop(i)
 
-	"""
-	for i in merge_update:
-		for k,v in i.items():
-			print(k)
-			for kk, vv in v.items():
-				print(kk,vv,len(vv),"\r\n"*1)
-			print("\r\n"*2)
-		print("\r\n"*5)
-	"""
-	
-	#print(merge_update)
-	#print(final_result)
-
-	#add merge_update result with uniques years proceesed by alpha. That must be done into a dict, then return it
-
-	result = document_unique(key=key,key_unique=key_unique,data=data_unique,add_mult=double_data)
+	result = document_unique(key=key,key_unique=key_unique,data=data,add_mult=double_data)
 	result.extend(duplicated_data)
 
-	#for i in result:
-		#print(i,"\r\n"*2)
-
-	#print(result)
 	return(result)
 
 
@@ -220,8 +177,8 @@ def document_data_merge(result_set):
 	result = []
 
 	if len(year) == len(set([int(x) for x in y_complete])):
-		if separated_document == 0: result = document_unique(key=y_complete,unique=y_distinct,data=data)
-		else: result = data
+		if separated_document == 0: result = document_unique(key=y_complete,key_unique=y_distinct,data=data)
+		else: result = [{k: v} for k,v  in data[0].items()]
 	else: result = document_separated(key=y_complete,data=data)
 	
 	return(result)
@@ -372,16 +329,18 @@ def api_client(id,base64,config_json,online=True):
 		)
 	else:
 		#with open(os.path.join(path_result,"open_ai_output.json")) as jsf: result_set = json.load(jsf)
-		with open(os.path.join(path_result,r"sintetic/result_set_beta.json")) as jsf: result_set = json.load(jsf)
+		#with open(os.path.join(path_result,r"sintetic/result_set_alpha.json")) as jsf: result_set = json.load(jsf)
+		#with open(os.path.join(path_result,r"sintetic/result_set_beta.json")) as jsf: result_set = json.load(jsf)
+		#with open(os.path.join(path_result,r"sintetic/result_set_beta_II.json")) as jsf: result_set = json.load(jsf)
+		with open(os.path.join(path_result,r"sintetic/result_set_omega.json")) as jsf: result_set = json.load(jsf)
 	
 	result_set = document_data_merge(result_set)
 
+	if debug: 
+		with open(os.path.join(path_result,r"input_custom_structure.json"),"w") as jsf:  json.dump(result_set, jsf, indent=4)
+			
 	final_dictionary = custom_structure(id=id,key_name=config_json["custom_output_format"],result_set=result_set)
 	with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(final_dictionary, f, indent=4)
 	debug_code(message=f"Total Request duration (sec): {(time.time() - start)}",debug=debug)
 
-	# print(result_set)
-	# for dc in result_set:
-	# 	print(dc,"\r\n"*2)
-	#return(0)
 	return(final_dictionary)

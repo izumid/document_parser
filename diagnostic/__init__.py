@@ -94,7 +94,12 @@ def execute_diagnostic(genbase,run,online,id):
 		with open(os.path.join(os.getcwd(),r"__file_test",filename), 'r', encoding='utf-8') as file: base64 = json.load(file)
 		result = api_client(id=id,base64=base64,config_json=config_json,online=online)
 
-		with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(result, f, indent=4)
-		print(result)
+		try:
+			#print(result)
+			with open(os.path.join(path_result,"result.json"), "w") as f: json.dump(result, f, indent=4)
+			#with open(os.path.join(path_result,"result.json"), "w") as f: f.write(result)
+		except Exception as error:
+			print({"error": "saving final result. Error: {error}."})
+		
 		
 execute_diagnostic(genbase=False,run=True,online=False,id="762")
